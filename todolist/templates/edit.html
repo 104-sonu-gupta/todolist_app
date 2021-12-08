@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Taskmate - {{title}}</title>
+{% endblock title %} 
+
+{% block content %}
+    
+    <h1 class="text-center mb-5">{{title}}</h1>
+
+
+    {% if task_obj.user == request.user %}
+        <form class="mb-3 d-flex align-items-center justify-content-betweeen" method="POST">
+            {% csrf_token %}
+            <div class="col-1"><label for="task"><h6></h6></label></div>
+            <div class="col-8"><input type="text" class="form-control" id="task" name="task" value="{{task_obj.task}}"></div>
+            <input type="hidden" id="done" name="done" value="{{task_obj.done}}">
+            {% comment %} Required for copying same value of done to the database {% endcomment %}
+            <div class="col-2"><button type="submit" class="btn btn-primary">Update Task</button></div>
+        </form>
+    {% else %}
+        <div class="alert alert-danger" role="alert">
+            <strong>You are not allowed to edit someone else's task</strong>
+        </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

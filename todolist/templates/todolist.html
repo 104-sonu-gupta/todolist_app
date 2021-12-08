@@ -1,0 +1,87 @@
+{% extends 'base.html' %} 
+{% block title %}
+<title>Taskmate - {{title}}</title>
+{% endblock title %} 
+
+{% block content %}
+
+<h1 class="text-center mb-5">{{title}}</h1>
+
+{% if messages %} 
+    {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success alert-dismissible" role="alert">
+        {% else %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+        {% endif %}
+            <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            <strong>{{message}}</strong>
+        </div>
+    {% endfor %} 
+{% endif %}
+
+
+<form class="mb-3 d-flex align-items-center justify-content-between" method="POST">
+    {% csrf_token %}
+    <div class="pl-0 col-11">
+        <input type="text" class="form-control" id="add-task" placeholder="Add Task here !" name="task">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Add Task</button>
+    </div>
+</form>
+
+<hr/>
+
+<table class="table table-hover table-dark text-center">
+    <thead>
+        <tr>
+            <th>Task</th=>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if tasks %} 
+            {% for task in tasks %} 
+                {% if task.done %}
+                    <tr class="bg-success">
+                        <td class="pl-5 text-left"><del> {{task.task}}</del></td>
+                        <td><a href="{% url 'completed-task' task.id %}"><button class="btn btn-info col-6">Mark Pending</button></a></td>
+                        <td><a href="{% url 'edit-task' task.id %}"><button class="btn btn-warning">Edit</button></a></td>
+                        <td><a href="{% url 'delete-task' task.id %}"> <button class="btn btn-danger">Delete</button></a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td  class="pl-5 text-left">{{task.task}}</td>
+                        <td><a href="{% url 'completed-task' task.id %}"><button class="btn btn-info col-6">Mark Completed</button></a></td>
+                        <td><a href="{% url 'edit-task' task.id %}"><button class="btn btn-warning">Edit</button></a></td>
+                        <td><a href="{% url 'delete-task' task.id %}"><button class="btn btn-danger">Delete</button></a></td>
+                    </tr>
+                {% endif %} 
+            {% endfor %} 
+        {% endif %}
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+        <li class="page-item"><a class="page-link" href="?pg=1" tabindex="-1"><<</a></li>
+
+        {% if tasks.has_previous %}
+            <li class="page-item"><a class="page-link" href="?pg={{ tasks.previous_page_number }}">{{ tasks.previous_page_number }}</a></li>
+        {% endif %}
+
+        <li class="page-item"><a class="page-link" href="?pg={{ tasks.number }}">{{ tasks.number }}</a></li>
+
+        {% if tasks.has_next %}
+            <li class="page-item"><a class="page-link" href="?pg={{ tasks.next_page_number }}">{{ tasks.next_page_number }}</a></li>
+        {% endif %}
+
+        <li class="page-item"><a class="page-link" href="?pg={{ tasks.paginator.num_pages }}">>></a></li>
+
+    </ul>
+</nav> 
+
+{% endblock content %} 

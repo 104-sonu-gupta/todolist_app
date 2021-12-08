@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+
+{% block title %}
+    <title>Taskmate - Logout</title>
+    <meta http-equiv="refresh" content="3; url = {% url 'index' %}" /> 
+{% endblock title %} 
+
+{% block content %}
+    <div class="d-flex align-item-center justify-content-center mt-5">
+        <div>
+            <p class="display-4">Logged Out Successfully</p>
+            <p class="text-center mt-5 text-muted h5">"Are your tasks over? If not, use taskmate to complete them"</p>
+        </div>
+    </div>
+{% endblock content %}
